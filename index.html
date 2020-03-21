@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+</head>
+<style>
+    body{
+        background: #43C6AC;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right,#43C6AC #191654);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right,#43C6AC #191654); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+    
+</style>
+<body>
+    <div class="row">
+        <div class="offset-md-4 col-md-8">
+            <h1 class="display-3">barcode generator</h1>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="offset-md-3">
+            <svg id="barcode1"></svg>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="datos" class="row offset-md-4 col-md-8">
+            <div class="form-group col-md-2" >
+             <label for="Name">Name:</label>
+             <input class="form-control" type="text" id="inputOne">
+            </div>
+             <div class="form-group col-md-2">
+                 <label for="Surname">Surname:</label>
+                 <input class="form-control" type="text" id="inputTwo">
+             </div>
+             <div class="form-group">
+                 <br>
+                <button class="btn btn-success btn-lg" id="submit" onclick="fillBarcodeData()">Send</button>
+                <button class="btn btn-danger btn-lg" id="clear" onclick="clearBarcode()">Clear</button>
+             </div>
+         </div>
+    </div>
+
+</body>
+
+<script>
+
+    const valueOne = document.getElementById("inputOne");
+    const valueTwo = document.getElementById("inputTwo");
+    const barcodeTag = document.querySelector("#barcode1");
+
+    var data = [];
+    let values = {"name":"","surname":""}
+    function fillBarcodeData(){
+        if(valueOne.value == "" || valueOne.value == null || valueOne.value == undefined || valueTwo.value == "" || valueTwo.value == null || valueTwo.value == undefined){
+            alert(`inputs are empty, please fill them to generate barcode`)
+        }else{
+            values.name ="Name: "+ valueOne.value;
+            values.surname = "Surname: "+ valueTwo.value;
+            data.push(values.name);
+            data.push(values.surname);
+            let dataCurated = data.join(" | ")
+            JsBarcode("#barcode1", dataCurated, {
+                displayValue: true,
+                background: "#43C6AC"
+            });
+            data = [];
+            dataCurated = [];
+        }   
+    }
+    function clearBarcode(){
+        barcodeTag.style.display = "none";
+    }
+</script>
+</html>
