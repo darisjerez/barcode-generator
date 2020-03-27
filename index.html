@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script src="./qrcode.js"></script>
 </head>
 <style>
     body {
@@ -28,8 +29,11 @@
     </div>
     <hr>
     <div class="row">
-        <div class="offset-md-3">
-            <svg id="barcode1"></svg>
+        <div class="offset-md-5">
+            <svg>
+                <g id="barcode1"></g>
+            </svg>
+            <div id="qrcode" style="width:200px; height:200px; margin-top:15px;"></div>
         </div>
     </div>
 
@@ -37,31 +41,38 @@
         <div id="datos" class="row offset-md-3 col-md-8">
             <div class="form-group col-md-8">
                 <label for="Name">Name:</label>
-                <input class="form-control form-control-sm" type="text" id="name" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="name"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Surname">Middle Name:</label>
-                <input class="form-control form-control-sm" type="text" id="middleName" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="middleName"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Name">Last Name:</label>
-                <input class="form-control form-control-sm" type="text" id="lastName" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="lastName"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Surname">License #:</label>
-                <input class="form-control form-control-sm" type="text" id="licenseNumber" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="licenseNumber"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Name">Vehicle Class:</label>
-                <input class="form-control form-control-sm" type="text" id="vehicleClass" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="vehicleClass"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Surname">Restriction Codes:</label>
-                <input class="form-control form-control-sm" type="text" id="restrictionCodes" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="restrictionCodes"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Name">Endorsement Codes:</label>
-                <input class="form-control form-control-sm" type="text" id="endorsementCodes" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="endorsementCodes"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Surname">Expiration Date:</label>
@@ -89,15 +100,18 @@
             </div>
             <div class="form-group col-md-8">
                 <label for="Name">Height:</label>
-                <input class="form-control form-control-sm" type="number" id="height" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="number" id="height"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Surname">Address 1:</label>
-                <input class="form-control form-control-sm" type="text" id="address" onkeydown="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="address"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Name">City:</label>
-                <input class="form-control form-control-sm" type="text" id="city" onkeyup="this.value = this.value.toUpperCase();">
+                <input class="form-control form-control-sm" type="text" id="city"
+                    onkeyup="this.value = this.value.toUpperCase();">
             </div>
             <div class="form-group col-md-8">
                 <label for="Surname">State:</label>
@@ -416,8 +430,7 @@
                     <option value="Zimbabwe">Zimbabwe</option>
                 </select>
             </div>
-            <div class="form-group  offset-md-3 col-md-8">
-                <br>
+            <div class="form-group offset-md-3 col-md-8">
                 <button class="btn btn-success btn-lg" id="submit" onclick="fillBarcodeData()">Send</button>
                 <button class="btn btn-danger btn-lg" id="clear" onclick="clearBarcode()">Clear</button>
             </div>
@@ -427,29 +440,51 @@
 </body>
 
 <script>
+    const name = document.getElementById("name");
+    const middleName = document.getElementById("middleName");
+    const lastName = document.getElementById("lastName");
+    const license = document.getElementById("licenseNumber");
+    const vehicleClass = document.getElementById("vehicleClass");
+    const restrictionCodes = document.getElementById("restrictionCodes");
+    const endorsementCodes = document.getElementById("endorsementCodes");
+    const expirationDate = document.getElementById("expirationDate");
+    const issueDate = document.getElementById("issueDate");
+    const dateOfBirth = document.getElementById("dateOfBirth");
+    const gender = document.getElementById("gender");
+    const eyeColor = document.getElementById("eyeColor");
+    const height = document.getElementById("height");
+    const address = document.getElementById("address");
+    const state = document.getElementById("state");
+    const city = document.getElementById("city");
+    const zipCode = document.getElementById("zipCode");
+    const documentDiscriminator = document.getElementById("documentDiscriminator");
+    const country = document.getElementById("country");
+    const element = document.getElementById("barcode")
 
-    const valueOne = document.getElementById("inputOne");
-    const valueTwo = document.getElementById("inputTwo");
-    const barcodeTag = document.querySelector("#barcode1");
 
-    var data = [];
-    let values = { "name": "", "surname": "" }
+
     function fillBarcodeData() {
-        if (valueOne.value == "" || valueOne.value == null || valueOne.value == undefined || valueTwo.value == "" || valueTwo.value == null || valueTwo.value == undefined) {
-            alert(`inputs are empty, please fill them to generate barcode`)
-        } else {
-            values.name = "Name: " + valueOne.value;
-            values.surname = "Surname: " + valueTwo.value;
-            data.push(values.name);
-            data.push(values.surname);
-            let dataCurated = data.join(" | ")
-            JsBarcode("#barcode1", dataCurated, {
-                displayValue: true,
-                background: "#43C6AC"
-            });
-            data = [];
-            dataCurated = [];
+        let values = {
+            "name": name.value, "middleName": middleName.value, "lastName": lastName.value, "license": license.value, "vehicleClass": vehicleClass.value, "restrictionCodes": restrictionCodes.value,
+            "sendorsementCodes": endorsementCodes.value, "expirationDate": expirationDate.value, "issueDate": issueDate.value, "dateOfBirth": dateOfBirth.value, "gender": gender.value,
+            "eyeColor": eyeColor.value, "height": height.value, "address": address.value, "state": state.value, "city": city.value,
+            "zipCode": zipCode.value, "documentDiscriminator": documentDiscriminator.value, "country": country.value
         }
+        console.log(values)
+        //var data = Object.entries((values));
+       var data =[];
+        Object.entries(values).forEach(([key, value]) => data.push(`${key}: ${value}`));
+        console.log(data);
+
+        dataCurated = data.join(" - ");
+        console.log(dataCurated);
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+      width : 100,
+      height : 100,
+      useSVG: true
+         });
+
+  qrcode.makeCode(dataCurated)
     }
     function clearBarcode() {
         barcodeTag.style.display = "none";
